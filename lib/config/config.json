@@ -1,0 +1,10 @@
+{
+  "cli": {
+    "types": {},
+    "shorthands": {}
+  },
+  "defaults": {
+    "appConfig": "sodo.yaml",
+    "userConfig": "~/.sodo.user.defaults"
+  }
+}

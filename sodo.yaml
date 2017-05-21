@@ -1,0 +1,10 @@
+---
+  resources:
+    ci:
+      type: circleci
+      decsription: >
+        We're using CircleCI for this repo.
+        It's connected to the F9 Teams Master account.
+    backlog:
+      type: jira
+...

@@ -1,0 +1,17 @@
+{
+  "name": "sodo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/sodo.js",
+  "bin": "./bin/sodo-cli.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "deepcopy": "^0.6.3",
+    "js-yaml": "^3.8.4",
+    "nopt": "^4.0.1"
+  }
+}
