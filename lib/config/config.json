@@ -6,5 +6,15 @@
   "defaults": {
     "appConfig": "sodo.yaml",
     "userConfig": "~/.sodo.user.defaults"
-  }
+  },
+  "resources": [
+    "jira",
+    "github"
+  ],
+  "types":[
+
+  ],
+  "commands": [
+
+  ]
 }
