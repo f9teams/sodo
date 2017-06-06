@@ -1,10 +1,30 @@
 ---
+  root: http://foobar/
   resources:
     ci:
       type: circleci
+      label: repo
       decsription: >
         We're using CircleCI for this repo.
         It's connected to the F9 Teams Master account.
+      path: ://circleci/foo/baz
+    logs:
+      type: splunk
+      label: production
+      path: ://foo/baz
+    logs:
+      type: directory
+      label: development
+      path: ./sodo.log
+      scripts:
+        tail: tail ./sodo.log
+    cd:
+      type: none``
     backlog:
       type: jira
+    tickets:
+      type: text
+      label: development
+      description: >
+        Devo tickets are outside the team room on the 4th floor.
 ...
