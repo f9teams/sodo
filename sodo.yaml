@@ -9,15 +9,18 @@
         It's connected to the F9 Teams Master account.
       path: ://circleci/foo/baz
     logs:
-      type: splunk
-      label: production
-      path: ://foo/baz
-    logs:
-      type: directory
-      label: development
-      path: ./sodo.log
-      scripts:
-        tail: tail ./sodo.log
+      -
+        type: directory
+        label: development
+        path: ./sodo.log
+        scripts:
+          tail: tail ./sodo.log
+      -
+        type: splunk
+        label: production
+        path: ://splunk/foo
+        scripts:
+          tail: splunk $path
     cd:
       type: none``
     backlog:

@@ -9,11 +9,11 @@
   },
   "resources": [
     "jira",
-    "github"
+    "text"
   ],
-  "types":[
-
-  ],
+  "types":{
+    "backlog": ["jira", "text", "trello"]
+  },
   "commands": [
 
   ]
