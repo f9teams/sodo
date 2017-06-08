@@ -5,7 +5,7 @@ var path = require('path');
 var stream = require("stream").Stream
 
 // Load the sodo.js file
-var sodo = require('../lib/sodo.js');
+var Sodo = require('../lib/sodo.js');
 
 // Grab a logger for logs.
 var log = require("../lib/util/logger.js");
@@ -41,5 +41,5 @@ var userConfig = require('../lib/config/user-config.js');
 userConfig.load();
 
 // At this point we should be ready to do some work. All of our things are in order.
-var client = sodo(appConfig.get(), userConfig.get());
+var client = new Sodo(appConfig.get(), userConfig.get());
 client.execute(type, command, args);
