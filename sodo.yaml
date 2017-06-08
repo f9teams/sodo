@@ -1,6 +1,10 @@
 ---
   root: http://foobar/
   resources:
+    config:
+      type: local
+      description: >
+        We're using a local, headless version of sodo.
     ci:
       type: circleci
       label: repo
