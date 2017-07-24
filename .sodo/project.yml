@@ -1,0 +1,63 @@
+resources:
+  project:
+    - label: cli
+      id: command
+      config:
+        description: |
+          The SODO CLI project.
+        command:
+          show: 'open https://github.com/f9teams/sodo'
+          build: npm test
+          run: sodo --help
+  backlog:
+    - label: product
+      id: jira
+      config:
+        description: >
+          The SODO backlog is managed in JIRA @
+          https://f9teams.atlassian.net/SODO
+
+          Adminitrator: eric@f9teams.com
+        url: 'https://f9teams.atlassian.net/'
+        projectKey: SODO
+  forum:
+    - label: chat
+      id: slackChannel
+      config:
+        description: |
+          Engineering discussions happen on Slack in the #sodo channel.
+          Adminitrator: eric@f9teams.com
+        domain: 'https://f9teams.slack.com/'
+        channel: sodo
+  log:
+    - label: local
+      id: command
+      config:
+        description: |
+          The SODO CLI writes logs to /tmp/sodo.log. Each log entry is a JSON
+          object and all enries are new line delimited. Pretty print by piping
+          to `bunyan -o short`. Bunyan can be installed using `npm i -g bunyan`.
+        command:
+          show: cat /tmp/sodo.log
+          tail: tail -f /tmp/sodo.log
+  build:
+    - label: circleci
+      id: circle
+      config:
+        description: |
+          Circle CI picks up all changes in GitHub and executes the build,
+          validating each change in a clean room environment. Log into CircleCI
+          using your GitHub credentials.
+        username: f9teams
+        project: sodo
+        vcstype: github
+  test:
+    - label: unit
+      id: command
+      config:
+        description: |
+          Execute the node unit tests
+        command:
+          show: npm test
+          run: npm test
+version: 1

@@ -1,0 +1,9 @@
+{
+  "reporterEnabled": "spec,mocha-junit-reporter,mocha-simple-html-reporter",
+  "mochaJunitReporterReporterOptions": {
+    "mochaFile": "./reports/test/junit/test-results.xml"
+  },
+  "mochaSimpleHtmlReporterReporterOptions": {
+    "output": "./reports/test/index.html"
+  }
+}
