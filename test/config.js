@@ -3,6 +3,8 @@
 const expect = require('chai').expect;
 const config = require('../lib/config');
 
+config.load(); // The singleton approach is bad for testing.
+
 describe('config', () => {
   it('loads', () => {
     expect(config).to.be.an('object');

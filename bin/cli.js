@@ -8,10 +8,10 @@ const initHandler = require('./handlers/init');
 const listHandler = require('./handlers/list');
 const verbHandler = require('./handlers/verb');
 
-
 // 🚀 sodo⌝
 
-y.env('SODO') // eslint-disable-line no-unused-vars
+y
+  .env('SODO') // eslint-disable-line no-unused-vars
   .fail((msg, err) => {
     if (err) {
       throw err; // preserve stack
@@ -28,13 +28,17 @@ y.env('SODO') // eslint-disable-line no-unused-vars
 // and use that to inform future design.
 
 // build an array of pairs [[type, verb], [type, verb]]
-const typeVerbPairs = reduce(registry.resources, (acc, types, type) => {
-  forEach(types, (typeSpec) => {
-    const verbs = typeSpec.class.verbs;
-    forEach(verbs, verb => acc.push([type, verb, typeSpec.label]));
-  });
-  return acc;
-}, []);
+const typeVerbPairs = reduce(
+  registry.resources,
+  (acc, types, type) => {
+    forEach(types, typeSpec => {
+      const verbs = typeSpec.class.verbs;
+      forEach(verbs, verb => acc.push([type, verb, typeSpec.label]));
+    });
+    return acc;
+  },
+  [],
+);
 
 function handler(type, verb) {
   switch (verb) {
@@ -48,66 +52,57 @@ function handler(type, verb) {
 }
 
 // build a map of verb to types {verb: [type, type]}
-const verbTypes = reduce(typeVerbPairs, (acc, [type, verb]) => {
-  acc[verb] = union(acc[verb], [type]);
-  return acc;
-}, {});
+const verbTypes = reduce(
+  typeVerbPairs,
+  (acc, [type, verb]) => {
+    acc[verb] = union(acc[verb], [type]);
+    return acc;
+  },
+  {},
+);
 
 Object.entries(verbTypes).forEach(([verb, types]) => {
-  y.command(
-    [verb],
-    false,
-    (vy) => {
-      types.forEach((type) => {
-        const cmdName = [type];
+  y.command([verb], false, vy => {
+    types.forEach(type => {
+      const cmdName = [`${type} [label]`];
 
-        if (type === 'project') {
-          cmdName.push('*');
-        }
+      if (type === 'project') {
+        cmdName.push('*');
+      }
 
-        vy.command(
-          cmdName,
-          'TODO type description',
-          noop,
-          handler(type, verb));
-      });
+      vy.command(cmdName, 'TODO type description', noop, handler(type, verb));
     });
+  });
 });
 
 // build a map of type to verbs {type: [verb, verb]}
-const typeVerbs = reduce(typeVerbPairs, (acc, [type, verb]) => {
-  acc[type] = union(acc[type], [verb]);
-  return acc;
-}, {});
+const typeVerbs = reduce(
+  typeVerbPairs,
+  (acc, [type, verb]) => {
+    acc[type] = union(acc[type], [verb]);
+    return acc;
+  },
+  {},
+);
 
 Object.entries(typeVerbs).forEach(([type, verbs]) => {
   // will override any already registered <verb> <resource> command if type === verb
   // e.g. `sodo build` will refer only to the resource type `build` and not to he verb
   //      `build`. `sodo build list` will work, but `sodo build project` will not.
-  y.command(
-    [type],
-    '',
-    (ry) => {
-      verbs.forEach((verb) => {
-        const cmdName = [verb];
+  y.command([type], '', ry => {
+    verbs.forEach(verb => {
+      const cmdName = [`${verb} [label]`];
 
-        if (verb === 'show') {
-          cmdName.push('*');
-        }
+      if (verb === 'show') {
+        cmdName.push('*');
+      }
 
-        ry.command(
-          cmdName,
-          'TODO verb description',
-          noop,
-          handler(type, verb));
-      });
+      ry.command(cmdName, 'TODO verb description', noop, handler(type, verb));
     });
+  });
 });
 
-y.version()
-  .help()
-  .commandDir('sodo-cmds')
-  .recommendCommands();
+y.version().help().commandDir('sodo-cmds').recommendCommands();
 
 const argv = y.argv;
 log.trace({ argv });

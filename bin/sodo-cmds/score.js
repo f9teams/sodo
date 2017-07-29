@@ -1,6 +1,8 @@
+const sodo = require('../../lib/sodo');
+
 module.exports = {
   command: 'score',
-  builder: (yargs) => {
+  builder: yargs => {
     yargs.option('m', {
       alias: ['min'],
       describe: 'exit with error code if SODO score is below',
@@ -8,11 +10,11 @@ module.exports = {
       type: 'number',
     });
   },
-  handler: (argv) => {
+  handler: argv => {
     // TODO calculate actual score
-    const score = 50;
+    const score = sodo.score();
 
-    console.log(score);
+    console.log(score); // eslint-disable-line no-console
 
     const min = argv.min;
     if (score < min) {

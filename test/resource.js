@@ -53,6 +53,10 @@ describe('resources', () => {
     const backlog = new MyBacklog();
 
     expect(MyBacklog.verbs).to.contain.members(['show', 'jump', 'bounce']);
-    expect(backlog.constructor.verbs).to.contain.members(['show', 'jump', 'bounce']);
+    expect(backlog.constructor.verbs).to.contain.members([
+      'show',
+      'jump',
+      'bounce',
+    ]);
   });
 });

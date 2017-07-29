@@ -29,6 +29,14 @@ resources:
           Adminitrator: eric@f9teams.com
         domain: 'https://f9teams.slack.com/'
         channel: sodo
+    - label: emergency
+      id: slackChannel
+      config:
+        description: >
+          When something heinous goes wrong, use this slack channel.  Everyone
+          should have notifications ON.
+        domain: 'https://f9teams.slack.com/'
+        channel: random
   log:
     - label: local
       id: command

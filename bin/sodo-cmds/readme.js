@@ -4,6 +4,7 @@
 const config = require('../../lib/config');
 const chalk = require('chalk');
 const { isEmpty } = require('lodash');
+const sodo = require('../../lib/sodo');
 
 chalk.enabled = true;
 
@@ -11,7 +12,7 @@ module.exports = {
   command: 'readme',
   aliases: ['*'],
   handler: () => {
-    let sodoScore = 0;
+    let sodoScore = sodo.score();;
     let tips = [];
 
     console.log(`README.md for ${config.projectDir}`);
@@ -31,8 +32,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo test init\' to configure tests'));
       console.log();
       tips.push('Consider adding tests with \'sodo test init\'');
-    } else {
-      sodoScore ++;
     }
     tests.forEach((test) => {
       const label = test.label;
@@ -49,8 +48,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo lint init\' to configure a linter'));
       console.log();
       tips.push('Consider adding a linter with \'sodo lint init\'');
-    } else {
-      sodoScore ++;
     }
     linters.forEach((lint) => {
       const label = lint.label;
@@ -67,8 +64,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo build init\' to configure a build'));
       console.log();
       tips.push('Consider adding a build with \'sodo build init\'');
-    } else {
-      sodoScore ++;
     }
     builds.forEach((build) => {
       const label = build.label;
@@ -85,8 +80,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo log init\' to configure logs'));
       console.log();
       tips.push('Consider adding logs with \'sodo log init\'');
-    } else {
-      sodoScore ++;
     }
     logs.forEach((log) => {
       const label = log.label;
@@ -103,8 +96,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo forum init\' to configure a forum'));
       console.log();
       tips.push('Consider adding a discussion form with \'sodo forum init\'');
-    } else {
-      sodoScore ++;
     }
     forums.forEach((forum) => {
       const label = forum.label;
@@ -121,8 +112,6 @@ module.exports = {
       console.log(chalk.red('  Run \'sodo backlog init\' to configure tests'));
       console.log();
       tips.push('Consider adding backlog with \'sodo backlog init\'');
-    } else {
-      sodoScore ++;
     }
     backlogs.forEach((backlog) => {
       const label = backlog.label;
@@ -131,7 +120,7 @@ module.exports = {
       console.log(description.replace(/^/gm, '  '));
     });
 
-    console.log(chalk`{bold Your 🚀 sodo⌝ score is ${Math.floor(sodoScore / 6 * 100)}/100}`);
+    console.log(chalk`{bold Your 🚀 sodo⌝ score is ${sodoScore}/100}`);
     if (!isEmpty(tips)) {
       console.log(chalk`{green.bold Duffy's Tip of the Day: ${tips[Math.floor(Math.random() * tips.length)]}}`);
     }

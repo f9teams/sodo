@@ -1,10 +1,13 @@
 {
   "name": "sodo",
   "description": "SODO is a software utility that organizes and automates the hundreds of tools today’s developers need to ship code to production.  SODO enables software developers to come up to speed with all aspects of a project very quickly, and quantitatively scores each project to ensure that managers can compare the performance and quality of the projects they own. SODO is for developer environments what Chef is for infrastructure.",
-  "version": "1.0.0",
-  "author": "F9 Teams, Inc.",
-  "license": "UNLICENSED",
+  "version": "0.0.3",
+  "author": "Team SODO",
+  "license": "MIT",
   "private": true,
+  "engines": {
+    "node": ">=8.1.2"
+  },
   "main": "./lib/sodo.js",
   "bin": {
     "sodo": "./bin/cli.js"
@@ -12,13 +15,41 @@
   "scripts": {
     "test": "nyc mocha --recursive ./test --reporter mocha-multi-reporters --reporter-options configFile=./mocha-reports.json",
     "check-coverage": "nyc check-coverage",
-    "lint": "eslint . --format ./node_modules/eslint-detailed-reporter/lib/detailed.js --output-file ./reports/lint/index.html"
+    "lint": "eslint . --format ./node_modules/eslint-detailed-reporter/lib/detailed.js --output-file ./reports/lint/index.html",
+    "format": "eslint . --fix",
+    "postinstall": "node check-version.js"
   },
   "eslintConfig": {
-    "extends": "airbnb",
+    "extends": [
+      "airbnb",
+      "prettier"
+    ],
+    "plugins": [
+      "prettier"
+    ],
     "env": {
       "mocha": true,
       "node": true
+    },
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "singleQuote": true,
+          "trailingComma": "all"
+        }
+      ],
+      "max-len": [
+        "error",
+        {
+          "code": 120,
+          "ignoreTrailingComments": true,
+          "ignoreUrls": true,
+          "ignoreStrings": true,
+          "ignoreTemplateLiterals": true,
+          "ignoreRegExpLiterals": true
+        }
+      ]
     }
   },
   "nyc": {
@@ -64,16 +95,20 @@
     "bunyan": "latest",
     "bunyan-cloudwatch": "latest",
     "bunyan-format": "latest",
-    "chalk": "^2.0.1",
+    "chalk": "latest",
     "debug": "latest",
     "deepcopy": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-prettier": "latest",
     "inquirer": "latest",
     "js-yaml": "latest",
     "lodash": "latest",
     "mkdirp": "latest",
     "node-trello": "latest",
     "opn": "latest",
+    "prettier": "^1.5.3",
     "request": "latest",
+    "semver": "latest",
     "sync-request": "latest",
     "url-join": "latest",
     "uuid": "latest",

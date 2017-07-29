@@ -21,12 +21,13 @@ function whichResourcePrompt(resourceType) {
     },
   ];
 
-  return inquirer.prompt(questions)
-    .then(answers => answers.label || 'new');
+  return inquirer.prompt(questions).then(answers => answers.label || 'new');
 }
 
 function resourceChoices(resourceType) {
-  const choices = Object.entries(registry.resources[resourceType]).map(([key, type]) => ({
+  const choices = Object.entries(
+    registry.resources[resourceType],
+  ).map(([key, type]) => ({
     name: type.label,
     value: key,
   }));
@@ -42,7 +43,7 @@ function newResourcePrompt(resourceType) {
       type: 'input',
       name: 'label',
       message: `Enter a ${resourceType} label`,
-      validate: (v) => {
+      validate: v => {
         if (isEmpty(v)) {
           return `${resourceType} label cannot be empty`;
         }
@@ -62,15 +63,14 @@ function newResourcePrompt(resourceType) {
     },
   ];
 
-  return inquirer.prompt(newBacklogQuestions)
-    .then((answers) => {
-      const label = answers.label;
-      const id = answers.id;
-      const ResourceClass = registry.resources[resourceType][id].class;
-      const resource = new ResourceClass({ label, id });
-      config.resources[resourceType].push(resource.spec);
-      return resource;
-    });
+  return inquirer.prompt(newBacklogQuestions).then(answers => {
+    const label = answers.label;
+    const id = answers.id;
+    const ResourceClass = registry.resources[resourceType][id].class;
+    const resource = new ResourceClass({ label, id });
+    config.resources[resourceType].push(resource.spec);
+    return resource;
+  });
 }
 
 function existingResourcePrompt(resourceType, label) {
@@ -83,7 +83,7 @@ function existingResourcePrompt(resourceType, label) {
       name: 'label',
       message: `Enter a ${resourceType} label`,
       default: label,
-      validate: (v) => {
+      validate: v => {
         if (v === spec.label) {
           // label unchanged
           return true;
@@ -102,13 +102,12 @@ function existingResourcePrompt(resourceType, label) {
     },
   ];
 
-  return inquirer.prompt(questions)
-    .then((answers) => {
-      spec.label = answers.label;
+  return inquirer.prompt(questions).then(answers => {
+    spec.label = answers.label;
 
-      const resource = sodo.resources[resourceType][spec.label];
-      return resource;
-    });
+    const resource = sodo.resources[resourceType][spec.label];
+    return resource;
+  });
 }
 
 function getResourcePrompt(resourceType, label) {
@@ -120,18 +119,20 @@ function getResourcePrompt(resourceType, label) {
 }
 
 function initResourcePrompt(argv, resource) {
-  return resource.init(argv)
+  return resource
+    .init(argv)
     .then(resource.configure.bind(resource))
     .then(config.save.bind(config));
 }
 
 function initHandler(type) {
-  return (argv) => {
+  return argv => {
     log.debug(argv, `${type} init`);
     const label = argv.label;
     if (label) {
-      return getResourcePrompt(type, label)
-        .then(initResourcePrompt.bind(null, argv));
+      return getResourcePrompt(type, label).then(
+        initResourcePrompt.bind(null, argv),
+      );
     }
 
     // if we are missing a label we will ask the user for it
