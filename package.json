@@ -17,7 +17,7 @@
     "check-coverage": "nyc check-coverage",
     "lint": "eslint . --format ./node_modules/eslint-detailed-reporter/lib/detailed.js --output-file ./reports/lint/index.html",
     "format": "eslint . --fix",
-    "postinstall": "node check-version.js"
+    "postinstall": "node report-install.js; node check-version.js"
   },
   "eslintConfig": {
     "extends": [
