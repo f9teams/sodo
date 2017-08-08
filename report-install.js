@@ -4,12 +4,8 @@
 'use strict';
 
 const analytics = require('./lib/analytics');
-const user = require('./lib/user');
-
-const userId = user.uuid;
 
 analytics.track({
-  userId,
   event: 'Install',
   properties: {},
 });

@@ -6,12 +6,10 @@
 const engines = require('./package.json').engines;
 const semver = require('semver');
 const analytics = require('./lib/analytics');
-const user = require('./lib/user');
 const debug = require('debug')('check-version');
 
 const currentVersion = process.version;
 const requiredVersion = engines.node;
-const userId = user.uuid;
 
 if (!semver.satisfies(currentVersion, requiredVersion)) {
   const message =
@@ -23,7 +21,6 @@ if (!semver.satisfies(currentVersion, requiredVersion)) {
 
   analytics.track(
     {
-      userId,
       event: 'Check Version Failed',
       properties: {
         currentVersion,

@@ -1,11 +1,23 @@
+/* eslint-disable no-console */
+
 const config = require('../../lib/config');
+const analytics = require('../../lib/analytics');
 
 function listHandler(type) {
-  return () => {
+  return argv => {
     const labels = config.resources[type].map(
       resourceSpec => resourceSpec.label,
     );
-    labels.forEach(l => console.log(l)); // eslint-disable-line no-console
+
+    analytics.track({
+      event: 'Command',
+      properties: {
+        command: argv._,
+        labels,
+      },
+    });
+
+    labels.forEach(l => console.log(l));
   };
 }
 
