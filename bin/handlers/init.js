@@ -78,7 +78,10 @@ function newResourcePrompt(resourceType) {
 
 function existingResourcePrompt(resourceType, label) {
   const spec = config.resources[resourceType][label];
-  log.debug({ label, resourceType, spec }, `init existing ${resourceType}: ${label}`);
+  log.debug(
+    { label, resourceType, spec },
+    `init existing ${resourceType}: ${label}`,
+  );
 
   const questions = [
     {
@@ -123,7 +126,7 @@ function getResourcePrompt(resourceType, label) {
 
 function trackInit(argv, resource) {
   analytics.track({
-    event: 'Command',
+    event: 'Init',
     properties: {
       command: sortBy(argv._),
       rawCommand: argv._,
@@ -146,6 +149,15 @@ function initHandler(type) {
     log.debug(argv, `${type} init`);
 
     const label = argv.label;
+
+    analytics.track({
+      event: 'Start Init',
+      properties: {
+        command: sortBy(argv._),
+        rawCommand: argv._,
+        label,
+      },
+    });
 
     if (label) {
       return getResourcePrompt(type, label).then(
