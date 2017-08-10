@@ -2,6 +2,7 @@
 
 const config = require('../../lib/config');
 const analytics = require('../../lib/analytics');
+const { sortBy } = require('lodash');
 
 function listHandler(type) {
   return argv => {
@@ -12,7 +13,8 @@ function listHandler(type) {
     analytics.track({
       event: 'Command',
       properties: {
-        command: argv._,
+        command: sortBy(argv._),
+        rawCommand: argv._,
         labels,
       },
     });

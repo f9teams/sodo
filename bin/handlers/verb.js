@@ -1,20 +1,12 @@
 /* eslint-disable no-console */
 
 const sodo = require('../../lib/sodo');
-const { isEmpty } = require('lodash');
+const { isEmpty, sortBy } = require('lodash');
 const analytics = require('../../lib/analytics');
 
 function verbHandler(type, verb) {
   return argv => {
     const label = argv.label;
-
-    analytics.track({
-      event: 'Command',
-      properties: {
-        command: argv._,
-        label,
-      },
-    });
 
     let resource;
     if (isEmpty(label)) {
@@ -22,6 +14,16 @@ function verbHandler(type, verb) {
     } else {
       resource = sodo.resources[type][label];
     }
+
+    analytics.track({
+      event: 'Command',
+      properties: {
+        command: sortBy(argv._),
+        rawCommand: argv._,
+        spec: resource.spec,
+        label,
+      },
+    });
 
     return resource[verb](argv);
   };
