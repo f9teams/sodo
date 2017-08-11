@@ -1,4 +1,7 @@
+/* eslint-disable no-console */
+
 const sodo = require('../../lib/sodo');
+const analytics = require('../../lib/analytics');
 
 module.exports = {
   command: 'score',
@@ -14,7 +17,15 @@ module.exports = {
     // TODO calculate actual score
     const score = sodo.score();
 
-    console.log(score); // eslint-disable-line no-console
+    analytics.track({
+      event: 'Score',
+      properties: {
+        command: argv._,
+        score,
+      },
+    });
+
+    console.log(score);
 
     const min = argv.min;
     if (score < min) {

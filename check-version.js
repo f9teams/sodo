@@ -1,11 +1,35 @@
+// This file is compatible with legacy versions of node >= 4.0.0
+
+// eslint-disable-next-line strict, lines-around-directive
+'use strict';
+
 const engines = require('./package.json').engines;
 const semver = require('semver');
+const analytics = require('./lib/analytics');
+const debug = require('debug')('check-version');
 
-const version = engines.node;
-if (!semver.satisfies(process.version, version)) {
+const currentVersion = process.version;
+const requiredVersion = engines.node;
+
+if (!semver.satisfies(currentVersion, requiredVersion)) {
+  const message =
+    'Current Node.js version (%s) does not satisfy required Node.js version (%s)';
+  debug(message, currentVersion, requiredVersion);
+
   // eslint-disable-next-line no-console
-  console.log(
-    `Required node version ${version} is not met by current version ${process.version}.`,
+  console.log(message, currentVersion, requiredVersion);
+
+  analytics.track(
+    {
+      event: 'Check Version Failed',
+      properties: {
+        currentVersion,
+        requiredVersion,
+      },
+    },
+    err => {
+      debug('Analytics Flushed', err);
+      process.exit(1);
+    } // eslint-disable-line
   );
-  process.exit(1);
 }

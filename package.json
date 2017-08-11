@@ -17,7 +17,7 @@
     "check-coverage": "nyc check-coverage",
     "lint": "eslint . --format ./node_modules/eslint-detailed-reporter/lib/detailed.js --output-file ./reports/lint/index.html",
     "format": "eslint . --fix",
-    "postinstall": "node check-version.js"
+    "postinstall": "node report-install.js; node check-version.js"
   },
   "eslintConfig": {
     "extends": [
@@ -91,7 +91,14 @@
     "all": true,
     "report-dir": "./reports/coverage"
   },
+  "lint-staged": {
+    "{lib,bin,test}/**/*.js": [
+      "npm run format",
+      "git add"
+    ]
+  },
   "dependencies": {
+    "analytics-node": "^3.0.0",
     "bunyan": "latest",
     "bunyan-cloudwatch": "latest",
     "bunyan-format": "latest",
@@ -123,6 +130,8 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
+    "husky": "latest",
+    "lint-staged": "latest",
     "mocha": "latest",
     "mocha-junit-reporter": "latest",
     "mocha-multi-reporters": "latest",

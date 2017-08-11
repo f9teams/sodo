@@ -1,9 +1,12 @@
+/* eslint-disable no-console */
+
 const inquirer = require('inquirer');
 const sodo = require('../../lib/sodo');
 const log = require('../../lib/log');
 const config = require('../../lib/config');
 const registry = require('../../lib/resource-registry');
-const { isEmpty } = require('lodash');
+const { isEmpty, sortBy } = require('lodash');
+const analytics = require('../../lib/analytics');
 
 function whichResourcePrompt(resourceType) {
   log.debug({ resourceType }, 'which resource');
@@ -75,7 +78,10 @@ function newResourcePrompt(resourceType) {
 
 function existingResourcePrompt(resourceType, label) {
   const spec = config.resources[resourceType][label];
-  log.debug({ label, spec }, `init existing ${resourceType}: ${label}`);
+  log.debug(
+    { label, resourceType, spec },
+    `init existing ${resourceType}: ${label}`,
+  );
 
   const questions = [
     {
@@ -118,17 +124,41 @@ function getResourcePrompt(resourceType, label) {
   return existingResourcePrompt(resourceType, label);
 }
 
+function trackInit(argv, resource) {
+  analytics.track({
+    event: 'Init',
+    properties: {
+      command: sortBy(argv._),
+      rawCommand: argv._,
+      spec: resource.spec,
+    },
+  });
+  return resource;
+}
+
 function initResourcePrompt(argv, resource) {
   return resource
     .init(argv)
     .then(resource.configure.bind(resource))
+    .then(trackInit.bind(null, argv))
     .then(config.save.bind(config));
 }
 
 function initHandler(type) {
   return argv => {
     log.debug(argv, `${type} init`);
+
     const label = argv.label;
+
+    analytics.track({
+      event: 'Start Init',
+      properties: {
+        command: sortBy(argv._),
+        rawCommand: argv._,
+        label,
+      },
+    });
+
     if (label) {
       return getResourcePrompt(type, label).then(
         initResourcePrompt.bind(null, argv),

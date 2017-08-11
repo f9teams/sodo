@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 const y = require('yargs');
 const log = require('../lib/log');
 const registry = require('../lib/resource-registry');
@@ -7,20 +9,33 @@ const { noop, forEach, reduce, union } = require('lodash');
 const initHandler = require('./handlers/init');
 const listHandler = require('./handlers/list');
 const verbHandler = require('./handlers/verb');
+const analytics = require('../lib/analytics');
 
 // 🚀 sodo⌝
 
 y
-  .env('SODO') // eslint-disable-line no-unused-vars
-  .fail((msg, err) => {
+  .env('SODO')
+  // eslint-disable-next-line no-unused-vars
+  .fail((message, err, yargs) => {
     if (err) {
-      throw err; // preserve stack
+      throw err;
     }
-    console.error('see --help for usage'); // eslint-disable-line no-console
-    console.error(msg); // eslint-disable-line no-console
 
-    // TODO: this fucks up the bunyan file streams, they do not flush before the process dies
-    process.exit(1);
+    console.error('see --help for usage');
+    console.error(message);
+
+    analytics.track(
+      {
+        event: 'Command Failed',
+        properties: {
+          message,
+        },
+      },
+      () => {
+        // TODO: this fucks up the bunyan file streams, they do not flush before the process dies
+        process.exit(1);
+      },
+    );
   });
 
 // We want to support `sodo <resource> <verb> [label]` and
